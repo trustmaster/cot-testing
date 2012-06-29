@@ -21,26 +21,25 @@ function test_testing_find_files()
 		$cfg['modules_dir'] . '/testing/test/testing_functions.test.php'
 	);
 	sort($correct);
-	
+
 	$got = testing_find_files($cfg['modules_dir'] . '/testing');
 	sort($got);
-	
+
 	$diff1 = array_diff($correct, $got);
 	$diff2 = array_diff($got, $correct);
-	
+
 	if (count($diff1) > 0)
 	{
-		cot_error('testing_find_files() is missing items: ' . print_r($diff1, true));
+		return 'Missing items: ' . print_r($diff1, true);
 	}
 	elseif (count($diff2) > 0)
 	{
-		cot_error('testing_find_files() got extra items: ' . print_r($diff2, true));
+		return 'Got extra items: ' . print_r($diff2, true);
 	}
 	else
 	{
 		return true;
 	}
-	return false;
 }
 
 // Test for testing_find_funcs()
@@ -54,23 +53,20 @@ function test_testing_find_funcs()
 
 	$got = testing_find_funcs($cfg['modules_dir'] . '/testing/test/testing_functions.test.php');
 	sort($got);
-	
+
 	$diff1 = array_diff($correct, $got);
 	$diff2 = array_diff($got, $correct);
-	
+
 	if (count($diff1) > 0)
 	{
-		cot_error('testing_find_funcs() is missing items: ' . print_r($diff1, true));
+		return 'Missing items: ' . print_r($diff1, true);
 	}
 	elseif (count($diff2) > 0)
 	{
-		cot_error('testing_find_funcs() got extra items: ' . print_r($diff2, true));
+		return 'Got extra items: ' . print_r($diff2, true);
 	}
 	else
 	{
 		return true;
 	}
-	return false;
 }
-
-?>

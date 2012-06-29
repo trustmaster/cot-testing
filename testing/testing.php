@@ -58,35 +58,61 @@ if (!empty($m) && count($files) > 0)
 	$i = explode(' ', microtime());
 	$starttime = $i[1] + $i[0];
 	$tests_count = 0;
-	
+
 	foreach ($files as $file)
 	{
-		$funcs = testing_find_funcs($file);
+		$setup_func = '';
+		$teardown_func = '';
+		$funcs = testing_find_funcs($file, $setup_func, $teardown_func);
 		if (count($funcs) > 0)
 		{
 			require_once $file;
+
+			// Run the tests
 			$file_pass = true;
 			foreach ($funcs as $func)
 			{
-				$pass = $func();
+				// Run setup if present
+				if (!empty($setup_func))
+				{
+					$setup_func();
+				}
+
+				// Run the test
+				$ret = $func();
+				$pass = $ret === TRUE;
 				$file_pass &= $pass;
+
+				// Emit error message if string is returned
+				$error = is_string($ret) ? $ret : '';
+
+				// Run teardown if present
+				if (!empty($teardown_func))
+				{
+					$teardown_func($pass);
+				}
+
+				// Show results
 				$t->assign(array(
-					'TESTING_RUN_FILE_FUNC_NAME' => $func,
-					'TESTING_RUN_FILE_FUNC_PASS' => $pass,
-					'TESTING_RUN_FILE_FUNC_STATUS' => $pass ? $L['testing_pass'] : $L['testing_fail']
+					'TESTING_RUN_FILE_FUNC_NAME'    => $func,
+					'TESTING_RUN_FILE_FUNC_PASS'    => $pass,
+					'TESTING_RUN_FILE_FUNC_STATUS'  => $pass ? $L['testing_pass'] : $L['testing_fail'],
+					'TESTING_RUN_FILE_FUNC_MESSAGE' => $error
 				));
 				$t->parse('MAIN.TESTING_RUN.TESTING_RUN_FILE.TESTING_RUN_FILE_FUNC');
 				$tests_count++;
 			}
+
+			// Render file results
 			$t->assign(array(
-				'TESTING_RUN_FILE_PATH' => $file,
-				'TESTING_RUN_FILE_PASS' => $file_pass,
+				'TESTING_RUN_FILE_PATH'   => $file,
+				'TESTING_RUN_FILE_PASS'   => $file_pass,
 				'TESTING_RUN_FILE_STATUS' => $file_pass ? $L['testing_pass'] : $L['testing_fail']
 			));
 			$t->parse('MAIN.TESTING_RUN.TESTING_RUN_FILE');
 		}
 	}
-	
+
 	$i = explode(' ', microtime());
 	$endtime = $i[1] + $i[0];
 	$seconds = round(($endtime - $starttime), 3);
@@ -95,10 +121,10 @@ if (!empty($m) && count($files) > 0)
 		'TESTING_RUN_COUNT' => $tests_count,
 		'TESTING_RUN_SECONDS' => $seconds
 	));
-	
+
 	// Display messages if any
 	cot_display_messages($t, 'MAIN.TESTING_RUN');
-	
+
 	$t->parse('MAIN.TESTING_RUN');
 }
 elseif (!empty($m))
@@ -149,5 +175,3 @@ $t->parse();
 $t->out();
 
 require_once $cfg['system_dir'].'/footer.php';
-
-?>

@@ -30,10 +30,11 @@ function test_myext_foo()
 	}
 	else
 	{
-		cot_error('test_myext_foo(): myext_foo() returned ' . $res);
-		return false;
+		return 'myext_foo() returned ' . $res;
 	}
 }
 ```
 
 Then you can open testing module and run tests for this particular extension or entire site at once.
+
+For more information please visit [module page at Cotonti Extensions](http://www.cotonti.com/extensions/development-maintenance/testing_module)

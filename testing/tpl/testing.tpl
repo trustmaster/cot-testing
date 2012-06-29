@@ -11,13 +11,13 @@
 			{TESTING_INTRO_EXAMPLE}
 		</div>
 		<!-- END: TESTING_INTRO -->
-		
+
 		<!-- BEGIN: TESTING_NOTESTS -->
 		<div class="error">
 			{PHP.L.testing_notfound}
 		</div>
-		<!-- END: TESTING_NOTESTS --> 
-		
+		<!-- END: TESTING_NOTESTS -->
+
 		<!-- BEGIN: TESTING_RUN -->
 		<h3>{PHP.L.testing_log}</h3>
 		<table class="cells">
@@ -43,13 +43,24 @@
 						</span>
 					</td>
 				</tr>
+				<!-- IF {TESTING_RUN_FILE_FUNC_MESSAGE} -->
+				<tr class="even">
+					<td colspan="2">
+						<div class="error">
+							{TESTING_RUN_FILE_FUNC_MESSAGE}
+						</div>
+					</td>
+				</tr>
+				<!-- ENDIF -->
 				<!-- END: TESTING_RUN_FILE_FUNC -->
 			<!-- END: TESTING_RUN_FILE -->
 		</table>
-		
+
+		<!-- IF {PHP.cot_error} -->
 		<h3>{PHP.L.Messages}</h3>
 		{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
-		
+		<!-- ENDIF -->
+
 		<hr />
 		<p>
 			{TESTING_RUN_COUNT} {PHP.L.testing_tests_run_in} {TESTING_RUN_SECONDS} {PHP.L.testing_seconds}

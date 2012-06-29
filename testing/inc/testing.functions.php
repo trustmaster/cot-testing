@@ -44,19 +44,29 @@ function testing_find_files($folder, $recursively = false)
 /**
  * Searches for test functions within a given test file
  * @param string $file File path
+ * @param string $setup_func Fill this var with setup func name if found
+ * @param string $teardown_func Fill this var with teardown func name if found
  * @return array Function names
  */
-function testing_find_funcs($file)
+function testing_find_funcs($file, &$setup_func = '', &$teardown_func = '')
 {
 	$funcs = array();
-	
+
 	$def_funcs = testing_get_defined_functions_in_file($file);
-	
+
 	foreach ($def_funcs as $func)
 	{
 		if (preg_match('#^test_#', $func))
 		{
 			$funcs[] = $func;
+		}
+		elseif (preg_match('#^setup_#', $func))
+		{
+			$setup_func = $func;
+		}
+		elseif (preg_match('#^teardown_#', $func))
+		{
+			$teardown_func = $func;
 		}
 	}
 	return $funcs;
@@ -124,5 +134,3 @@ function testing_get_defined_functions_in_file($file)
 
 	return $functions;
 }
-
-?>
