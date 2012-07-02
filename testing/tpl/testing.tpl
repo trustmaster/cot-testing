@@ -56,10 +56,7 @@
 			<!-- END: TESTING_RUN_FILE -->
 		</table>
 
-		<!-- IF {PHP.cot_error} -->
-		<h3>{PHP.L.Messages}</h3>
-		{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
-		<!-- ENDIF -->
+		{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"
 
 		<hr />
 		<p>
